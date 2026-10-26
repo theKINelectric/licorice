@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""Profile-based attach/resume entry point; all model use belongs to the client."""
+import json
+import subprocess
+import sys
+from being_sessions import main
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as exc:
+        detail = str(exc) if isinstance(exc, ValueError) else "Check selected files, native owner and compatible local runtime."
+        print(json.dumps({"ok": False, "error": "Memory attach refused. " + detail,
+                          "effect": "No fallback, fork or transcript edit was performed."}), file=sys.stderr)
+        sys.exit(1)

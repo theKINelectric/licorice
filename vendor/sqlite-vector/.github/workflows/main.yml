@@ -1,0 +1,455 @@
+name: Build, Test and Release
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  build:
+    if: ${{ !contains(github.event.head_commit.message, '[auto-update]') }}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container && matrix.container || '' }}
+    name: ${{ matrix.name }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }} build${{ matrix.arch != 'arm64-v8a' && matrix.arch != 'armeabi-v7a' && matrix.name != 'ios-sim' && matrix.name != 'ios' && matrix.name != 'apple-xcframework' && matrix.name != 'android-aar' && ( matrix.name != 'macos' || matrix.arch != 'x86_64' ) && ' + test' || ''}}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: x86_64
+            name: linux
+          - os: ubuntu-22.04-arm
+            arch: arm64
+            name: linux
+          - os: ubuntu-22.04
+            arch: x86_64
+            name: linux-musl
+            container: alpine:latest
+          - os: ubuntu-22.04-arm
+            arch: arm64
+            name: linux-musl
+          - os: macos-15
+            name: macos
+          - os: macos-15
+            arch: x86_64
+            name: macos
+            make: ARCH=x86_64
+          - os: macos-15
+            arch: arm64
+            name: macos
+            make: ARCH=arm64
+          - os: windows-2022
+            arch: x86_64
+            name: windows
+          - os: ubuntu-22.04
+            arch: arm64-v8a
+            name: android
+            make: PLATFORM=android ARCH=arm64-v8a
+          - os: ubuntu-22.04
+            arch: armeabi-v7a
+            name: android
+            make: PLATFORM=android ARCH=armeabi-v7a
+          - os: ubuntu-22.04
+            arch: x86_64
+            name: android
+            make: PLATFORM=android ARCH=x86_64
+            sqlite-amalgamation-zip: https://sqlite.org/2025/sqlite-amalgamation-3490100.zip
+          - os: macos-15
+            name: ios
+            make: PLATFORM=ios
+          - os: macos-15
+            name: ios-sim
+            make: PLATFORM=ios-sim
+          - os: macos-15
+            name: apple-xcframework
+            make: xcframework
+          - os: ubuntu-22.04
+            name: android-aar
+            make: aar
+
+    defaults:
+      run:
+        shell: ${{ matrix.container && 'sh' || 'bash' }}
+
+    steps:
+
+      - uses: actions/checkout@v4.2.2
+
+      - name: android setup java
+        if: matrix.name == 'android-aar'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: windows install dependencies
+        if: matrix.name == 'windows'
+        run: choco install sqlite -y
+
+      - name: macos install dependencies
+        if: matrix.name == 'macos'
+        run: brew link sqlite --force
+
+      - name: linux-musl x86_64 install dependencies
+        if: matrix.name == 'linux-musl' && matrix.arch == 'x86_64'
+        run: apk update && apk add --no-cache gcc make sqlite musl-dev linux-headers
+
+      - name: linux-musl arm64 setup container
+        if: matrix.name == 'linux-musl' && matrix.arch == 'arm64'
+        run: |
+          docker run -d --name alpine \
+            --platform linux/arm64 \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            alpine:latest \
+            tail -f /dev/null
+          docker exec alpine sh -c "apk update && apk add --no-cache gcc make sqlite musl-dev linux-headers"
+
+      - name: build sqlite-vector
+        run: ${{ matrix.name == 'linux-musl' && matrix.arch == 'arm64' && 'docker exec alpine' || '' }} make extension ${{ matrix.make && matrix.make || ''}}
+
+      - name: create keychain for codesign
+        if: matrix.os == 'macos-15'
+        run: |
+          echo "${{ secrets.APPLE_CERTIFICATE }}" | base64 --decode > certificate.p12
+          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          security import certificate.p12 -k build.keychain -P "${{ secrets.CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+
+      - name: codesign and notarize dylib
+        if: matrix.os == 'macos-15' && matrix.name != 'apple-xcframework'
+        run: |
+          codesign --sign "${{ secrets.APPLE_TEAM_ID }}" --timestamp --options runtime dist/vector.dylib
+          ditto -c -k dist/vector.dylib dist/vector.zip
+          xcrun notarytool submit dist/vector.zip --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_PASSWORD }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" --wait
+          rm dist/vector.zip
+
+      - name: codesign and notarize xcframework
+        if: matrix.name == 'apple-xcframework'
+        run: |
+          find dist/vector.xcframework -name "*.framework" -exec echo "Signing: {}" \; -exec codesign --sign "${{ secrets.APPLE_TEAM_ID }}" --timestamp --options runtime {} \; # Sign each individual framework FIRST
+          codesign --sign "${{ secrets.APPLE_TEAM_ID }}" --timestamp --options runtime dist/vector.xcframework # Then sign the xcframework wrapper
+          ditto -c -k --keepParent dist/vector.xcframework dist/vector.xcframework.zip
+          xcrun notarytool submit dist/vector.xcframework.zip --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_PASSWORD }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" --wait
+          rm -rf dist/vector.xcframework
+
+      - name: cleanup keychain for codesign
+        if: matrix.os == 'macos-15'
+        run: |
+          rm certificate.p12
+          security delete-keychain build.keychain
+
+      - name: android setup test environment
+        if: matrix.name == 'android' && matrix.arch != 'arm64-v8a' && matrix.arch != 'armeabi-v7a'
+        run: |
+
+          echo "::group::enable kvm group perms"
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          echo "::endgroup::"
+
+          echo "::group::download and build sqlite3 without SQLITE_OMIT_LOAD_EXTENSION"
+          curl -O ${{ matrix.sqlite-amalgamation-zip }}
+          unzip sqlite-amalgamation-*.zip
+          export ${{ matrix.make }}
+          $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/${{ matrix.arch }}-linux-android26-clang sqlite-amalgamation-*/shell.c sqlite-amalgamation-*/sqlite3.c -o sqlite3 -ldl
+          # remove unused folders to save up space
+          rm -rf sqlite-amalgamation-*.zip sqlite-amalgamation-*
+          echo "::endgroup::"
+
+          echo "::group::prepare the test script"
+          make test PLATFORM=$PLATFORM ARCH=$ARCH || echo "It should fail. Running remaining commands in the emulator"
+          cat > commands.sh << EOF
+            mv -f /data/local/tmp/sqlite3 /system/xbin
+            cd /data/local/tmp
+            $(make test PLATFORM=$PLATFORM ARCH=$ARCH -n)
+          EOF
+          echo "::endgroup::"
+
+      - name: android test sqlite-vector
+        if: matrix.name == 'android' && matrix.arch != 'arm64-v8a' && matrix.arch != 'armeabi-v7a'
+        uses: reactivecircus/android-emulator-runner@v2.34.0
+        with:
+          api-level: 26
+          arch: ${{ matrix.arch }}
+          script: |
+            adb root
+            adb remount
+            adb push ${{ github.workspace }}/. /data/local/tmp/
+            adb shell "sh /data/local/tmp/commands.sh"
+
+      - name: test sqlite-vector
+        if: contains(matrix.name, 'linux') || matrix.name == 'windows' || ( matrix.name == 'macos' && matrix.arch != 'x86_64' )
+        run: ${{ matrix.name == 'linux-musl' && matrix.arch == 'arm64' && 'docker exec alpine' || '' }} make test ${{ matrix.make && matrix.make || ''}}
+
+      - name: unit test sqlite-vector
+        if: contains(matrix.name, 'linux') || ( matrix.name == 'macos' && matrix.arch != 'x86_64' )
+        run: ${{ matrix.name == 'linux-musl' && matrix.arch == 'arm64' && 'docker exec alpine' || '' }} make unittest ${{ matrix.make && matrix.make || ''}}
+
+      - uses: actions/upload-artifact@v4.6.2
+        if: always()
+        with:
+          name: vector-${{ matrix.name }}${{ matrix.arch && format('-{0}', matrix.arch) || '' }}
+          path: dist/vector.*
+          if-no-files-found: error
+
+  avx512:
+    # The AVX-512 kernels are compiled out of every other job: the plain `unittest` target
+    # builds all sources in one invocation, so __AVX512F__ is undefined and the suite
+    # silently exercises the scalar fallback. This job builds them for real and asserts
+    # which backend was installed, so a fallback fails instead of passing quietly.
+    #
+    # GitHub's hosted fleet is mixed - some runners have AVX-512, some do not, and there
+    # is no way to request one (actions/runner#1069). When this runner has it we run the
+    # kernels natively; otherwise we run them under Intel SDE, which emulates the ISA
+    # deterministically. Either way EXPECT_BACKEND makes the job fail if AVX-512 is not
+    # what actually ran.
+    name: avx512 kernels
+    if: ${{ !contains(github.event.head_commit.message, '[auto-update]') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      # Intel SDE, from Intel's own download mirror. Bump both together; the job fails on
+      # a checksum mismatch rather than running an unverified binary.
+      SDE_URL: https://downloadmirror.intel.com/924984/sde-external-10.13.1-2026-07-28-lin.tar.xz
+      SDE_SHA256: 94e97d623fec54385686e1e7ba65ebc9941748c05ee451423948334892bf2b50
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: does this runner have AVX-512?
+        id: cpu
+        run: |
+          grep -m1 '^model name' /proc/cpuinfo
+          missing=""
+          for f in avx512f avx512bw avx512vl avx512dq; do
+            grep -qw "$f" /proc/cpuinfo || missing="$missing $f"
+          done
+          if [ -z "$missing" ]; then
+            echo "native=true" >> "$GITHUB_OUTPUT"
+            echo "::notice title=AVX-512::this runner has AVX-512, running the kernels on hardware"
+          else
+            echo "native=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=AVX-512::this runner is missing$missing, running the kernels under Intel SDE"
+          fi
+
+      - name: install Intel SDE
+        if: steps.cpu.outputs.native == 'false'
+        run: |
+          curl -fsSL -o /tmp/sde.tar.xz "$SDE_URL"
+          echo "$SDE_SHA256  /tmp/sde.tar.xz" | sha256sum -c -
+          mkdir -p /tmp/sde
+          tar -xJf /tmp/sde.tar.xz -C /tmp/sde --strip-components=1
+          /tmp/sde/sde64 --version | head -2
+
+      - name: run the suite on the AVX-512 kernels
+        run: |
+          if [ "${{ steps.cpu.outputs.native }}" = "true" ]; then
+            make unittest-simd EXPECT_BACKEND=AVX512
+          else
+            make unittest-simd EXPECT_BACKEND=AVX512 RUNNER="/tmp/sde/sde64 -skx --"
+          fi
+
+      - name: run the suite on the AVX2 kernels
+        # Only meaningful where AVX-512 is absent: the runtime check prefers AVX-512
+        # whenever the CPU has it, so asserting AVX2 there would correctly fail. Cheap
+        # extra coverage either way - until now no job built these kernels at all.
+        if: steps.cpu.outputs.native == 'false'
+        run: make unittest-simd EXPECT_BACKEND=AVX2
+
+  release:
+    runs-on: ubuntu-22.04
+    name: release
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+
+      - uses: actions/checkout@v4.2.2
+
+      - uses: actions/download-artifact@v4.2.1
+        with:
+          path: artifacts
+
+      - name: zip artifacts
+        run: |
+          VERSION=$(make version)
+          for folder in "artifacts"/*; do
+            if [ -d "$folder" ]; then
+              name=$(basename "$folder")
+              if [[ "$name" != "vector-apple-xcframework" && "$name" != "vector-android-aar" ]]; then
+                tar -czf "${name}-${VERSION}.tar.gz" -C "$folder" .
+              fi
+              if [[ "$name" == "vector-apple-xcframework" ]]; then
+                # Use the ditto-created zip that preserves macOS symlinks and extract for other steps
+                cp "$folder/vector.xcframework.zip" "${name}-${VERSION}.zip"
+                unzip -q "$folder/vector.xcframework.zip" -d "$folder/"
+              elif [[ "$name" != "vector-android-aar" ]]; then
+                (cd "$folder" && zip -rq "../../${name}-${VERSION}.zip" .)
+              else
+                cp "$folder"/*.aar "${name}-${VERSION}.aar"
+              fi
+            fi
+          done
+
+      - name: release tag version from sqlite-vector.h
+        id: tag
+        run: |
+          VERSION=$(make version)
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest)
+            LATEST=$(echo "$LATEST_RELEASE" | jq -r '.name')
+
+            if [[ "$VERSION" != "$LATEST" || "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+              echo "version=$VERSION" >> $GITHUB_OUTPUT
+            else
+              echo "::warning file=src/sqlite-vector.h::To release a new version, please update the SQLITE_VECTOR_VERSION in src/sqlite-vector.h to be different than the latest $LATEST"
+            fi
+            exit 0
+          fi
+          echo "❌ SQLITE_VECTOR_VERSION not found in sqlite-vector.h"
+          exit 1
+
+      - uses: actions/checkout@v4.2.2
+        if: steps.tag.outputs.version != ''
+        with:
+          repository: sqliteai/sqlite-wasm
+          path: sqlite-wasm
+          submodules: recursive
+          token: ${{ secrets.PAT }}
+
+      - name: release sqlite-wasm
+        if: steps.tag.outputs.version != ''
+        run: |
+          cd sqlite-wasm
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config --global user.name "$GITHUB_ACTOR"
+          cd modules/sqlite-vector
+          git checkout ${{ github.sha }}
+          cd ../..
+          git add modules/sqlite-vector
+          PKG=sqlite-wasm/package.json
+          TMP=sqlite-wasm/package.tmp.json
+          jq --arg version "$(cat modules/sqlite/VERSION)-sync.$(cd modules/sqlite-sync && make version)-vector.$(cd modules/sqlite-vector && make version)" '.version = $version' "$PKG" > "$TMP" && mv "$TMP" "$PKG"
+          git add "$PKG"
+          git commit -m "Bump sqlite-vector version to ${{ steps.tag.outputs.version }}"
+          git push origin main
+
+      - uses: actions/setup-java@v4
+        if: steps.tag.outputs.version != ''
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: release android aar to maven central
+        if: steps.tag.outputs.version != ''
+        run: cd packages/android && ./gradlew publishAggregationToCentralPortal -PSIGNING_KEY="${{ secrets.SIGNING_KEY }}" -PSIGNING_PASSWORD="${{ secrets.SIGNING_PASSWORD }}" -PSONATYPE_USERNAME="${{ secrets.MAVEN_CENTRAL_USERNAME }}" -PSONATYPE_PASSWORD="${{ secrets.MAVEN_CENTRAL_TOKEN }}" -PVERSION="${{ steps.tag.outputs.version }}" -PAAR_PATH="../../artifacts/vector-android-aar/vector.aar"
+
+      - uses: actions/setup-node@v4
+        if: steps.tag.outputs.version != ''
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: build and publish npm packages
+        if: steps.tag.outputs.version != ''
+        run: |
+          cd packages/node
+
+          # Update version in package.json
+          echo "Updating versions to ${{ steps.tag.outputs.version }}..."
+
+          # Update package.json
+          jq --arg version "${{ steps.tag.outputs.version }}" \
+            '.version = $version | .optionalDependencies = (.optionalDependencies | with_entries(.value = $version))' \
+            package.json > package.tmp.json && mv package.tmp.json package.json
+
+          echo "✓ Updated package.json to version ${{ steps.tag.outputs.version }}"
+
+          # Generate platform packages
+          echo "Generating platform packages..."
+          node generate-platform-packages.js "${{ steps.tag.outputs.version }}" "../../artifacts" "./platform-packages"
+          echo "✓ Generated 7 platform packages"
+          ls -la platform-packages/
+
+          # Build main package
+          echo "Building main package..."
+          npm install
+          npm run build
+          npm test
+          echo "✓ Main package built and tested"
+
+          # Publish platform packages
+          echo "Publishing platform packages to npm..."
+          cd platform-packages
+          for platform_dir in */; do
+            platform_name=$(basename "$platform_dir")
+            echo "  Publishing @sqliteai/sqlite-vector-${platform_name}..."
+            cd "$platform_dir"
+            npm publish --provenance --access public
+            cd ..
+            echo "  ✓ Published @sqliteai/sqlite-vector-${platform_name}"
+          done
+          cd ..
+
+          # Publish main package
+          echo "Publishing main package to npm..."
+          npm publish --provenance --access public
+          echo "✓ Published @sqliteai/sqlite-vector@${{ steps.tag.outputs.version }}"
+
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Successfully published 8 packages to npm"
+          echo "   Main: @sqliteai/sqlite-vector@${{ steps.tag.outputs.version }}"
+          echo "   Platform packages: 7"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: update Package.swift checksum and version
+        if: steps.tag.outputs.version != ''
+        run: |
+          VERSION=${{ steps.tag.outputs.version }}
+          ZIP="vector-apple-xcframework-${VERSION}.zip"
+          if [ -f "$ZIP" ]; then
+            CHECKSUM=$(swift package compute-checksum "$ZIP")
+            URL="https://github.com/sqliteai/sqlite-vector/releases/download/${VERSION}/${ZIP}"
+            sed -i "s|url: \".*apple-xcframework.*\"|url: \"${URL}\"|" Package.swift
+            sed -i "s|checksum: \".*\"|checksum: \"${CHECKSUM}\"|" Package.swift
+            git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+            git config --global user.name "$GITHUB_ACTOR"
+            git add Package.swift
+            git commit -m "Update Package.swift checksum for ${VERSION} [auto-update]" || true
+            git push origin main || true
+          fi
+
+      - uses: softprops/action-gh-release@v2.2.1
+        if: steps.tag.outputs.version != ''
+        with:
+          token: ${{ secrets.RELEASE_PAT }}
+          body: |
+            # Packages
+
+            [**Flutter/Dart**](https://pub.dev/packages/sqlite_vector): `flutter pub add sqlite_vector:${{ steps.tag.outputs.version }}` or `dart pub add sqlite_vector:${{ steps.tag.outputs.version }}`
+            [**Node**](https://www.npmjs.com/package/@sqliteai/sqlite-vector): `npm install @sqliteai/sqlite-vector`
+            [**WASM**](https://www.npmjs.com/package/@sqliteai/sqlite-wasm): `npm install @sqliteai/sqlite-wasm`
+            [**Android**](https://central.sonatype.com/artifact/ai.sqlite/vector): `ai.sqlite:vector:${{ steps.tag.outputs.version }}`
+            [**Python**](https://pypi.org/project/sqliteai-vector): `pip install sqliteai-vector`
+            [**Swift**](https://github.com/sqliteai/sqlite-vector#swift-package): [Installation Guide](https://github.com/sqliteai/sqlite-vector#swift-package)
+
+            ---
+
+          generate_release_notes: true
+          tag_name: ${{ steps.tag.outputs.version }}
+          files: vector-*-${{ steps.tag.outputs.version }}.*
+          make_latest: true

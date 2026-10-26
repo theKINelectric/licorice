@@ -1,0 +1,12 @@
+[package]
+name = "vecspike"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+
+[dependencies]
+rusqlite = { version = "0.37", features = ["bundled"] }
+libsqlite3-sys = { version = "0.35", features = ["bundled"] }
+
+[build-dependencies]
+cc = "1"

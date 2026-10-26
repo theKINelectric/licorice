@@ -1,0 +1,24 @@
+name: sqlite_vector
+version: 0.9.85
+description: >
+  SQLite Vector is a cross-platform, ultra-efficient SQLite extension that
+  brings vector search capabilities to your embedded database. It works
+  seamlessly on iOS, Android, Windows, Linux, and macOS, using just 30MB of
+  memory by default. With support for Float32, Float16, BFloat16, Int8, UInt8
+  and 1Bit, and highly optimized distance functions, it's the ideal solution
+  for Edge AI applications.
+homepage: https://github.com/sqliteai/sqlite-vector
+repository: https://github.com/sqliteai/sqlite-vector
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  code_assets: ^1.0.0
+  hooks: ^1.0.0
+  path: ^1.8.0
+  sqlite3: ^3.0.0
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.24.0

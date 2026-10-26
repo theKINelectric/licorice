@@ -1,0 +1,27 @@
+[package]
+name = "licorice-providers"
+description = "Model providers for Licorice: System One judges (Coffee Cat, Jev); chat and embedding models to follow"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+rusqlite.workspace = true
+async-trait.workspace = true
+indexmap.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokenizers.workspace = true
+tiktoken-rs.workspace = true
+blake3.workspace = true
+tokio = { workspace = true, features = ["process", "io-util"] }
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+axum.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "net"] }

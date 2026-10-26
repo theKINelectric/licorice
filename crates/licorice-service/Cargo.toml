@@ -1,0 +1,25 @@
+[package]
+name = "licorice-service"
+description = "Bounded hosted trial over Licorice's attributed memory kernel"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+licorice = { path = "../licorice" }
+licorice-providers = { path = "../licorice-providers" }
+axum.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "net", "signal"] }
+serde.workspace = true
+serde_json.workspace = true
+blake3.workspace = true
+webauthn-rs = "=0.5.5"
+# Static OpenSSL keeps the qualified minimal runtime free of a system libssl dependency.
+openssl-sys = { version = "=0.9.117", features = ["vendored"] }
+
+[dev-dependencies]
+async-trait.workspace = true
+tempfile.workspace = true
+tower = { version = "0.5", features = ["util"] }

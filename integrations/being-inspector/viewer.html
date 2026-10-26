@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="__CSP__">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Licorice · Memory inspector</title>
+<style>__STYLE__</style>
+</head>
+<body>
+<header><div class="brand">LICORICE <span>MEMORY INSPECTOR · LOCAL ALPHA</span></div>
+<h1>A history you can inspect.</h1><p id="identity"></p>
+<p class="notice">Private snapshot · No network or model calls · No memory edits</p></header>
+<main>
+<section class="overview" id="overview" aria-label="Memory overview"></section>
+<section class="context"><div class="section-head"><h2>The current context</h2><span id="tokens" class="badge"></span></div>
+<p id="query"></p><p class="muted">Continuity-only preview. Observations remain distinct from endorsed judgments. Missing here does not establish absence.</p>
+<details><summary>Read the bounded packet</summary><pre id="packet"></pre></details>
+<details><summary>Inspect selection and omissions</summary><pre id="selection"></pre></details></section>
+<div class="toolbar"><label for="search">Search this snapshot</label><input id="search" type="search" placeholder="A source, judgment, person or commitment…">
+<nav id="tabs" aria-label="Memory sections"></nav></div>
+<p id="result-count" class="muted" role="status"></p><section id="records" aria-live="polite"></section>
+<section class="limits"><h2>How to read this memory</h2><div id="limits"></div>
+<p>Recorded endorsement describes this agent's stance. Source assurance describes attribution; neither certifies an external claim as true. This report is not a complete conversation archive or an import/restore package.</p></section>
+</main><footer>Memory Licorice · Keep this report outside public download folders.</footer>
+<script>__SCRIPT__</script>
+</body></html>

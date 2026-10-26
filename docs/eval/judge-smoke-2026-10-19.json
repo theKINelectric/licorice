@@ -1,0 +1,580 @@
+{
+  "date": "2026-10-19",
+  "timezone": "America/New_York",
+  "platform": "macOS arm64, Rust 1.98.1",
+  "scope": "Synthetic transport/persistence qualification and qualitative task check; three distinct cases, not a benchmark or calibration study.",
+  "coffee_cat_health_release": "0.3.1-371aa35",
+  "openrouter_credential_source": "OPENROUTER_API_KEY in project .env; secret value is not recorded",
+  "same_state_and_question_wording_verified": true,
+  "original_deadline_preserved": true,
+  "attempts": [
+    {
+      "engine": "coffee-cat",
+      "attempt": "initial_1s",
+      "configured_deadline_ms": 1000,
+      "case": "supported",
+      "judgment_id": 1,
+      "recorded_at": "2026-10-19T15:44:12.892000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "Where does Ada live?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": null,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": "no answer within 1s",
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 1002.625667,
+        "model": null,
+        "output_tokens": null,
+        "status": "unavailable",
+        "sufficient": null
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "initial_1s",
+      "configured_deadline_ms": 1000,
+      "case": "missing",
+      "judgment_id": 2,
+      "recorded_at": "2026-10-19T15:44:13.895000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "What is Ada's favorite color?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": null,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": "no answer within 1s",
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 1002.0635,
+        "model": null,
+        "output_tokens": null,
+        "status": "unavailable",
+        "sufficient": null
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "initial_1s",
+      "configured_deadline_ms": 1000,
+      "case": "contradicted",
+      "judgment_id": 3,
+      "recorded_at": "2026-10-19T15:44:14.898000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada has never lived in Rome. [S1:2]",
+          "question": "When did Ada move to Rome?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": null,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": "no answer within 1s",
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 1002.5570829999999,
+        "model": null,
+        "output_tokens": null,
+        "status": "unavailable",
+        "sufficient": null
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "diagnostic_5s",
+      "configured_deadline_ms": 5000,
+      "case": "supported",
+      "judgment_id": 4,
+      "recorded_at": "2026-10-19T15:44:54.127000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "Where does Ada live?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.7799929002541067,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": null,
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 596.892792,
+        "model": "coffee-cat-0.3",
+        "output_tokens": null,
+        "status": "judged",
+        "sufficient": 0.9993013243335144
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "diagnostic_5s",
+      "configured_deadline_ms": 5000,
+      "case": "missing",
+      "judgment_id": 5,
+      "recorded_at": "2026-10-19T15:44:54.664000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "What is Ada's favorite color?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.09009299396195182,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": null,
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 536.4836670000001,
+        "model": "coffee-cat-0.3",
+        "output_tokens": null,
+        "status": "judged",
+        "sufficient": 0.8128673178375735
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "diagnostic_5s",
+      "configured_deadline_ms": 5000,
+      "case": "contradicted",
+      "judgment_id": 6,
+      "recorded_at": "2026-10-19T15:44:54.789000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada has never lived in Rome. [S1:2]",
+          "question": "When did Ada move to Rome?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.15405756269148546,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": null,
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 125.096875,
+        "model": "coffee-cat-0.3",
+        "output_tokens": null,
+        "status": "judged",
+        "sufficient": 0.4649015713733885
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "recheck_1s",
+      "configured_deadline_ms": 1000,
+      "case": "supported",
+      "judgment_id": 7,
+      "recorded_at": "2026-10-19T15:45:45.396000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "Where does Ada live?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.7799929002541067,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": null,
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 148.032834,
+        "model": "coffee-cat-0.3",
+        "output_tokens": null,
+        "status": "judged",
+        "sufficient": 0.9993013243335144
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "recheck_1s",
+      "configured_deadline_ms": 1000,
+      "case": "missing",
+      "judgment_id": 8,
+      "recorded_at": "2026-10-19T15:45:45.630000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "What is Ada's favorite color?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.09009299396195182,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": null,
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 233.381417,
+        "model": "coffee-cat-0.3",
+        "output_tokens": null,
+        "status": "judged",
+        "sufficient": 0.8128673178375735
+      }
+    },
+    {
+      "engine": "coffee-cat",
+      "attempt": "recheck_1s",
+      "configured_deadline_ms": 1000,
+      "case": "contradicted",
+      "judgment_id": 9,
+      "recorded_at": "2026-10-19T15:45:45.750000-04:00",
+      "logical_request": {
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "state": {
+          "memory": "Ada has never lived in Rome. [S1:2]",
+          "question": "When did Ada move to Rome?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.15405756269148546,
+        "engine": "http://127.0.0.1:4777/api/v1/decisions",
+        "error": null,
+        "input_tokens": null,
+        "judgment_id": null,
+        "latency_ms": 119.598916,
+        "model": "coffee-cat-0.3",
+        "output_tokens": null,
+        "status": "judged",
+        "sufficient": 0.4649015713733885
+      }
+    },
+    {
+      "engine": "openrouter",
+      "attempt": "initial_5s",
+      "configured_deadline_ms": 5000,
+      "case": "supported",
+      "judgment_id": 1,
+      "recorded_at": "2026-10-19T15:49:34.082000-04:00",
+      "logical_request": {
+        "deadline_ms": 5000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "Where does Ada live?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.05,
+        "cost": 1.7724e-05,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": null,
+        "input_tokens": 422,
+        "judgment_id": null,
+        "latency_ms": 559.0862920000001,
+        "model": "typesafe/jev-1.14-20261014",
+        "output_tokens": 42,
+        "status": "judged",
+        "sufficient": 0.98
+      }
+    },
+    {
+      "engine": "openrouter",
+      "attempt": "initial_5s",
+      "configured_deadline_ms": 5000,
+      "case": "missing",
+      "judgment_id": 2,
+      "recorded_at": "2026-10-19T15:49:34.343000-04:00",
+      "logical_request": {
+        "deadline_ms": 5000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "Ada lives in Oslo. [S1:1]",
+          "question": "What is Ada's favorite color?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.04,
+        "cost": 1.7808e-05,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": null,
+        "input_tokens": 424,
+        "judgment_id": null,
+        "latency_ms": 260.57075000000003,
+        "model": "typesafe/jev-1.14-20261014",
+        "output_tokens": 42,
+        "status": "judged",
+        "sufficient": 0.02
+      }
+    },
+    {
+      "engine": "openrouter",
+      "attempt": "initial_5s",
+      "configured_deadline_ms": 5000,
+      "case": "contradicted",
+      "judgment_id": 3,
+      "recorded_at": "2026-10-19T15:49:34.538000-04:00",
+      "logical_request": {
+        "deadline_ms": 5000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "Ada has never lived in Rome. [S1:2]",
+          "question": "When did Ada move to Rome?"
+        },
+        "version": 1
+      },
+      "assessment": {
+        "contradicted": 0.9,
+        "cost": 1.7892e-05,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": null,
+        "input_tokens": 426,
+        "judgment_id": null,
+        "latency_ms": 194.840667,
+        "model": "typesafe/jev-1.14-20261014",
+        "output_tokens": 42,
+        "status": "judged",
+        "sufficient": 0.14
+      }
+    }
+  ],
+  "openrouter_reported_cost_usd": 5.3423999999999995e-05,
+  "interpretation": [
+    "Both transports produced typed answers and persisted receipts.",
+    "Three initial Coffee Cat calls timed out at 1 s; cause is not established. A 5 s diagnostic and later original-budget recheck succeeded.",
+    "Coffee Cat assigned high sufficiency to missing information and low contradiction to an explicit false premise. Do not promote J10 to default from these results.",
+    "Jev separated the three synthetic cases sensibly. Held-out Licorice evaluation is still required before a decision policy is enabled."
+  ]
+}

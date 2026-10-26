@@ -1,0 +1,12 @@
+{
+  "package": "wordllama-0.4.0.post1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+  "url": "https://files.pythonhosted.org/packages/8e/68/c449826f8b8ba8cea65f2efc05b049c155e00dd3f17b6454ffbd9ba6652a/wordllama-0.4.0.post1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+  "package_sha256": "42c2c88907ace0b0681ac6f9092d6a300a6409a5d2d61071a3fb5e7159370c97",
+  "license_member": "wordllama-0.4.0.post1.dist-info/licenses/LICENSE",
+  "license_sha256": "a1e482c45bfab76056845e542ad4c95acfc4f38dd63be1c5b663c16065529fc8",
+  "assets": {
+    "l2_supercat_256.safetensors": "64b47a2dc493cb8e85944076601189739852d7b64e0e1eedcb1937a251cd9fd5",
+    "l2_supercat_tokenizer_config.json": "93248f2a9ec36c7b35f700a033d5f36228aae48db61aee31007fa49062cdeb68"
+  },
+  "installed_native_package": false
+}

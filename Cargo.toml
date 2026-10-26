@@ -1,0 +1,31 @@
+[workspace]
+resolver = "3"
+members = ["crates/licorice", "crates/licorice-providers", "crates/licorice-eval", "crates/licorice-aml", "crates/licorice-game", "crates/licorice-service"]
+exclude = ["spikes"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.98"
+license = "Apache-2.0"
+publish = false
+
+[workspace.dependencies]
+rusqlite = { version = "0.40.2", features = ["bundled", "backup"] }
+# Direct dependency so build.rs sees DEP_SQLITE3_INCLUDE (see crates/licorice/build.rs).
+libsqlite3-sys = { version = "0.38.2", features = ["bundled"] }
+tokio = { version = "1", features = ["rt", "sync", "time", "macros"] }
+thiserror = "2"
+tracing = "0.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+indexmap = { version = "2", features = ["serde"] }
+blake3 = "1"
+dotenvy = "0.15"
+async-trait = "0.1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+cc = "1"
+tempfile = "3"
+axum = "0.8"
+tokenizers = { version = "0.22", default-features = false, features = ["fancy-regex"] }
+tiktoken-rs = "0.12"

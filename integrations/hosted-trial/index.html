@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Open a memory workspace. Give agents and applications persistent, inspectable memory. Add, search and connect through a scoped API.">
+  <title>Memory Licorice · Memory for your agents and applications.</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the workspace</a>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Memory Licorice home"><span class="mark" aria-hidden="true">L<span>·</span></span><span>memory<br><strong>licorice</strong></span></a>
+    <span class="edition">EARLY ACCESS <span> / </span> MEMORY WORKSPACE</span>
+    <a class="family-link" href="https://stellarmodal.online/projects.html#licorice">A StellarModal project <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section id="welcome" class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome-copy">
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> MEMORY THAT CONNECTS</p>
+        <h1 id="welcome-title">Your agent.<br><em>A longer memory.</em></h1>
+        <p class="intro">Give your agents and applications context that lasts. Add a memory, retrieve its evidence, then connect your own tools.</p>
+        <button id="start-trial" class="button primary large" type="button">Open a memory workspace <span aria-hidden="true">→</span></button>
+        <p><a href="/account">Create a durable account · manage projects and app keys →</a></p>
+        <p class="quiet start-note">No installation. Start with a temporary workspace, then connect through the API.</p>
+      </div>
+      <div class="welcome-card" aria-label="How the memory workspace works">
+        <span class="card-kicker">FROM YOUR WORDS TO YOUR APPLICATION</span>
+        <ol class="journey">
+          <li><span class="step">01</span><div><h2>Add something to remember.</h2><p>A preference. A project. Something worth carrying forward.</p></div></li>
+          <li><span class="step">02</span><div><h2>Search for useful evidence.</h2><p>Retrieve a bounded context packet with its original sources.</p></div></li>
+          <li><span class="step">03</span><div><h2>Connect your own agent.</h2><p>Use a scoped API key. Memory belongs in the tools you already use.</p></div></li>
+        </ol>
+        <div class="card-footer"><span class="small-spark" aria-hidden="true">✳</span> Your words. Real memory. Inspectable results.</div>
+      </div>
+    </section>
+
+    <section id="workspace" class="workspace" aria-label="Your memory workspace" hidden>
+      <div class="workspace-heading">
+        <div><p class="eyebrow">YOUR TEMPORARY MEMORY WORKSPACE</p><h1>Your memory, connected.</h1><p id="workspace-expiry" class="quiet"></p></div>
+        <div class="workspace-actions"><a id="export-memory" class="button subtle" href="/api/v1/export" download="licorice-trial.json">Export memory <span aria-hidden="true">↗</span></a><button id="delete-trial" class="button subtle danger" type="button">Delete workspace</button></div>
+      </div>
+      <div class="workspace-grid">
+        <div class="work-column">
+          <section class="panel add-panel" aria-labelledby="add-title">
+            <div class="panel-heading"><div><span class="tiny-label">01 / ADD CONTEXT</span><h2 id="add-title">Leave something worth remembering.</h2></div><span class="count-badge" aria-label="Native memory">↝</span></div>
+            <p class="section-intro">A preference, a project detail, a fact your application should carry forward. Each observation keeps its source.</p>
+            <form id="remember-form" class="add-form"><label for="remember-input">Memory to add</label><textarea id="remember-input" rows="4" maxlength="4000" placeholder="For example: My project is called Night Orchard. It’s a quiet exploration game set in an abandoned greenhouse."></textarea><div class="example-buttons inline-examples" aria-label="Example memory inputs"><button type="button" data-example="My project is called Night Orchard. It is a quiet exploration game set in an abandoned greenhouse.">Project detail <span aria-hidden="true">↗</span></button><button type="button" data-example="I prefer explanations with a short example before the details.">Working preference <span aria-hidden="true">↗</span></button></div><div class="composer-footer"><p class="tiny quiet">Stored as your report. No model call or automatic adoption. Ctrl / ⌘ + Enter to add.</p><button id="remember-button" class="button primary" type="submit">Add memory <span aria-hidden="true">+</span></button></div></form>
+          </section>
+          <section class="panel recall-panel" aria-labelledby="recall-title">
+            <div class="panel-heading"><div><span class="tiny-label">02 / FIND WHAT MATTERS</span><h2 id="recall-title">Search your memory.</h2></div><span class="budget-badge">≤ 2k tokens</span></div>
+            <form id="recall-form"><label for="recall-query">Search query</label><div class="recall-input-row"><input id="recall-query" type="search" maxlength="4000" placeholder="What is my current project?" required><button id="recall-button" class="button secondary" type="submit">Search</button></div></form>
+            <p id="retrieval-note" class="search-scope tiny quiet">This preview matches words in stored reports. Automatic fact extraction and semantic retrieval are not enabled.</p>
+            <div id="recall-empty" class="recall-empty"><span aria-hidden="true">⌕</span><p>Retrieve the exact evidence your agent can use. Sources and the context budget stay visible.</p></div>
+            <div id="context-result" hidden><div class="context-meta"><span id="context-usage"></span><span id="context-sources"></span></div><details id="context-details" open><summary>Selected context packet</summary><pre id="context-text"></pre></details><p class="tiny quiet">This is selected evidence, not a generated answer or the entire store. The context budget stays at 2,000 tokens.</p></div>
+          </section>
+          <section class="panel api-panel" aria-labelledby="api-title">
+            <div class="panel-heading"><div><span class="tiny-label">03 / CONNECT YOUR APPLICATION</span><h2 id="api-title">A memory API for your own tools.</h2></div><span class="budget-badge">SCOPED KEY</span></div>
+            <p class="section-intro">Use the same memory from an agent, a game or a service. This key grants access to this temporary workspace only.</p>
+            <div class="api-body"><div id="api-key-section" hidden><label for="api-key">Workspace API key</label><div class="recall-input-row"><input id="api-key" type="password" readonly autocomplete="off" spellcheck="false"><button id="show-api-key" class="button secondary" type="button">Show</button><button id="copy-api-key" class="button secondary" type="button">Copy</button></div><p class="tiny quiet">Shown once when created or replaced. Keep it private. Anyone with this key can access this workspace until it expires or the key is replaced.</p></div><p id="key-missing" class="tiny quiet">The existing key is not shown again after reload. Replace it to connect a new client; this revokes the previous key.</p><button id="rotate-api-key" class="button subtle compact" type="button">Replace API key</button><div class="api-example-heading"><label for="api-example">Try the memory API</label><div class="code-tabs" aria-label="API examples"><button id="example-add" type="button" aria-pressed="true">Add</button><button id="example-search" type="button" aria-pressed="false">Search</button></div></div><pre id="api-example" tabindex="0"></pre><button id="copy-api-example" class="button secondary compact" type="button">Copy command</button><p class="tiny quiet">The commands use an environment variable, so the key does not appear in the example. Set LICORICE_API_KEY in your own terminal. No Rust compilation required.</p></div>
+          </section>
+        </div>
+        <aside class="memory-column" aria-label="Memory and evidence">
+          <section class="panel memory-panel" aria-labelledby="memory-title">
+            <div class="panel-heading"><div><span class="tiny-label">CARRIED FORWARD</span><h2 id="memory-title">Your memory</h2></div><span id="memory-count" class="count-badge">0</span></div>
+            <div class="memory-meta"><span id="memory-revision">Revision 0</span><span><span class="live-dot" aria-hidden="true"></span> Attributed sources</span></div>
+            <p class="memory-explainer">Stored observations keep their source. Remembering a statement does not make it an accepted belief.</p>
+            <div id="memory-list" class="memory-list"></div>
+            <p id="memory-empty" class="memory-empty">Nothing stored yet. Add a memory to get started.</p>
+          </section>
+
+          <section class="panel continuity-panel" aria-labelledby="continuity-title"><div class="panel-heading"><div><span class="tiny-label">CONTINUITY</span><h2 id="continuity-title">New session. Same memory.</h2></div></div><p class="section-intro">Start a fresh session boundary, then search again. Your stored observations remain available to your application.</p><div class="continuity-body"><p id="session-label" class="tiny quiet"></p><button id="new-conversation" class="button secondary" type="button">Start a new session <span aria-hidden="true">→</span></button><p class="tiny quiet">A session boundary does not delete, revise or adopt memories.</p></div></section>
+        </aside>
+      </div>
+      <div class="privacy-note"><span aria-hidden="true">◈</span><p id="privacy-copy">This is an early temporary workspace, not a registered account. Browser access uses a session cookie; API access uses a scoped key. Use sample information rather than private or sensitive material. Export what you want to keep, or delete the workspace.</p></div>
+    </section>
+
+    <div id="status-panel" class="status-panel" hidden><p id="status-message" role="status" aria-live="polite"></p><div class="status-actions"><button id="retry-action" class="button secondary compact" type="button" hidden>Retry the same request</button><button id="dismiss-action" class="button subtle compact" type="button" hidden>Dismiss</button></div></div>
+    <noscript><p class="notice noscript">The memory workspace needs JavaScript to talk to the memory service. You can still read about <a href="https://stellarmodal.online/projects.html#licorice">Memory Licorice</a>.</p></noscript>
+  </main>
+  <footer class="site-footer"><span>MEMORY LICORICE</span><p>Give your agents a longer memory.</p><span>BY STELLARMODAL</span></footer>
+  <dialog id="delete-dialog" aria-labelledby="delete-title"><h2 id="delete-title">Delete this workspace?</h2><p>This removes this workspace’s stored memory and session history. Export first if you want a copy. A future workspace starts empty.</p><div class="dialog-actions"><button id="cancel-delete" class="button secondary" type="button">Keep my workspace</button><button id="confirm-delete" class="button primary delete-confirm" type="button">Delete my workspace</button></div></dialog>
+</body>
+</html>

@@ -1,0 +1,449 @@
+{
+  "scope": "All questions from seven previously untouched original-LoCoMo conversations; local controlled comparison, not an AML score",
+  "questions": 1489,
+  "arms": {
+    "raw": {
+      "counts": {
+        "answerable_n": 1155,
+        "answerable_CORRECT": 574,
+        "gold_supported": 1069,
+        "answerable_WRONG": 522,
+        "answerable_AMBIGUOUS": 59,
+        "gold_unverified": 365,
+        "gold_conflicting": 55,
+        "adversarial_n": 334,
+        "adversarial_CORRECT": 255,
+        "adversarial_WRONG": 68,
+        "adversarial_AMBIGUOUS": 11
+      },
+      "categories": {
+        "3": {
+          "CORRECT": 33,
+          "WRONG": 35,
+          "AMBIGUOUS": 7
+        },
+        "1": {
+          "WRONG": 154,
+          "AMBIGUOUS": 6,
+          "CORRECT": 48
+        },
+        "2": {
+          "WRONG": 126,
+          "CORRECT": 89,
+          "AMBIGUOUS": 16
+        },
+        "4": {
+          "WRONG": 207,
+          "CORRECT": 404,
+          "AMBIGUOUS": 30
+        },
+        "5": {
+          "CORRECT": 255,
+          "WRONG": 68,
+          "AMBIGUOUS": 11
+        }
+      },
+      "mean_tokens": 1971.9079919408998,
+      "max_tokens": 2000,
+      "mean_evidence_recall": 0.6032895763524563,
+      "latency_p50_ms": 652.92475,
+      "latency_p95_ms": 775.230708
+    },
+    "facts": {
+      "counts": {
+        "answerable_n": 1155,
+        "answerable_WRONG": 409,
+        "gold_supported": 1062,
+        "answerable_CORRECT": 684,
+        "gold_unverified": 375,
+        "answerable_AMBIGUOUS": 62,
+        "gold_conflicting": 52,
+        "adversarial_n": 334,
+        "adversarial_CORRECT": 287,
+        "adversarial_WRONG": 39,
+        "adversarial_AMBIGUOUS": 8
+      },
+      "categories": {
+        "3": {
+          "WRONG": 35,
+          "AMBIGUOUS": 9,
+          "CORRECT": 31
+        },
+        "1": {
+          "WRONG": 148,
+          "CORRECT": 55,
+          "AMBIGUOUS": 5
+        },
+        "2": {
+          "CORRECT": 149,
+          "WRONG": 57,
+          "AMBIGUOUS": 25
+        },
+        "4": {
+          "CORRECT": 449,
+          "WRONG": 169,
+          "AMBIGUOUS": 23
+        },
+        "5": {
+          "CORRECT": 287,
+          "WRONG": 39,
+          "AMBIGUOUS": 8
+        }
+      },
+      "mean_tokens": 1964.1598388179987,
+      "max_tokens": 2000,
+      "mean_evidence_recall": 0.661443444013791,
+      "latency_p50_ms": 232.78025,
+      "latency_p95_ms": 297.73325
+    },
+    "connected": {
+      "counts": {
+        "answerable_n": 1155,
+        "answerable_CORRECT": 647,
+        "gold_supported": 1054,
+        "answerable_WRONG": 443,
+        "gold_unverified": 380,
+        "answerable_AMBIGUOUS": 65,
+        "gold_conflicting": 55,
+        "adversarial_n": 334,
+        "adversarial_CORRECT": 283,
+        "adversarial_WRONG": 40,
+        "adversarial_AMBIGUOUS": 11
+      },
+      "categories": {
+        "3": {
+          "CORRECT": 31,
+          "WRONG": 34,
+          "AMBIGUOUS": 10
+        },
+        "1": {
+          "WRONG": 156,
+          "CORRECT": 46,
+          "AMBIGUOUS": 6
+        },
+        "2": {
+          "CORRECT": 132,
+          "WRONG": 76,
+          "AMBIGUOUS": 23
+        },
+        "4": {
+          "CORRECT": 438,
+          "AMBIGUOUS": 26,
+          "WRONG": 177
+        },
+        "5": {
+          "CORRECT": 283,
+          "WRONG": 40,
+          "AMBIGUOUS": 11
+        }
+      },
+      "mean_tokens": 1916.70920080591,
+      "max_tokens": 2000,
+      "mean_evidence_recall": 0.5692264379697971,
+      "latency_p50_ms": 77.150125,
+      "latency_p95_ms": 295.278708
+    },
+    "reranked": {
+      "counts": {
+        "answerable_n": 1155,
+        "answerable_WRONG": 395,
+        "gold_supported": 1056,
+        "answerable_CORRECT": 689,
+        "gold_unverified": 371,
+        "answerable_AMBIGUOUS": 71,
+        "gold_conflicting": 62,
+        "adversarial_n": 334,
+        "adversarial_CORRECT": 285,
+        "adversarial_WRONG": 39,
+        "adversarial_AMBIGUOUS": 10
+      },
+      "categories": {
+        "3": {
+          "WRONG": 33,
+          "CORRECT": 34,
+          "AMBIGUOUS": 8
+        },
+        "1": {
+          "WRONG": 148,
+          "CORRECT": 52,
+          "AMBIGUOUS": 8
+        },
+        "2": {
+          "CORRECT": 150,
+          "WRONG": 56,
+          "AMBIGUOUS": 25
+        },
+        "4": {
+          "CORRECT": 453,
+          "WRONG": 158,
+          "AMBIGUOUS": 30
+        },
+        "5": {
+          "CORRECT": 285,
+          "WRONG": 39,
+          "AMBIGUOUS": 10
+        }
+      },
+      "mean_tokens": 1903.0879785090665,
+      "max_tokens": 2000,
+      "mean_evidence_recall": 0.6192016658357303,
+      "latency_p50_ms": 2611.071833,
+      "latency_p95_ms": 6481.7327080000005
+    }
+  },
+  "comparisons": {
+    "facts_vs_raw": {
+      "against": "raw",
+      "paired": {
+        "ambiguous_pairs": 79,
+        "wins": 209,
+        "losses": 101,
+        "determinate_pairs": 1076
+      },
+      "conversation_bootstrap_95_interval": [
+        0.04604051565377532,
+        0.15356489945155394
+      ]
+    },
+    "connected_vs_facts": {
+      "against": "facts",
+      "paired": {
+        "ambiguous_pairs": 75,
+        "wins": 42,
+        "losses": 78,
+        "determinate_pairs": 1080
+      },
+      "conversation_bootstrap_95_interval": [
+        -0.06340378197997776,
+        -0.007373271889400922
+      ]
+    },
+    "reranked_vs_connected": {
+      "against": "connected",
+      "paired": {
+        "ambiguous_pairs": 78,
+        "wins": 89,
+        "losses": 43,
+        "determinate_pairs": 1077
+      },
+      "conversation_bootstrap_95_interval": [
+        0.021541010770505385,
+        0.0668693009118541
+      ]
+    },
+    "connected_vs_raw": {
+      "against": "raw",
+      "paired": {
+        "ambiguous_pairs": 78,
+        "wins": 188,
+        "losses": 116,
+        "determinate_pairs": 1077
+      },
+      "conversation_bootstrap_95_interval": [
+        0.018255578093306288,
+        0.11639185257032007
+      ]
+    },
+    "reranked_vs_raw": {
+      "against": "raw",
+      "paired": {
+        "ambiguous_pairs": 82,
+        "wins": 217,
+        "losses": 98,
+        "determinate_pairs": 1073
+      },
+      "conversation_bootstrap_95_interval": [
+        0.07194899817850638,
+        0.1492822966507177
+      ]
+    },
+    "reranked_vs_facts": {
+      "against": "facts",
+      "paired": {
+        "ambiguous_pairs": 80,
+        "wins": 64,
+        "losses": 55,
+        "determinate_pairs": 1075
+      },
+      "conversation_bootstrap_95_interval": [
+        -0.02483900643974241,
+        0.03642671292281006
+      ]
+    }
+  },
+  "cost": {
+    "stage_accounted_usd": 7.1562822,
+    "known_usd": 7.1562822,
+    "unknown_calls": 0,
+    "calls": 17407,
+    "by_task": {
+      "adjudicate-source-v2": {
+        "calls": 4342,
+        "accounted_usd": 2.5693047
+      },
+      "answer": {
+        "calls": 5849,
+        "accounted_usd": 1.97323905
+      },
+      "extract": {
+        "calls": 4971,
+        "accounted_usd": 1.96899645
+      },
+      "rerank": {
+        "calls": 1913,
+        "accounted_usd": 0.5450037
+      },
+      "summarize": {
+        "calls": 332,
+        "accounted_usd": 0.0997383
+      }
+    },
+    "release_only_accounted_usd": 6.9240685,
+    "prior_accounted_usd": "22.477742734",
+    "combined_conservative_accounted_usd": "29.634024934"
+  },
+  "verification": {
+    "status": "passed",
+    "checks": {
+      "requests": 5956,
+      "token_recounts": 5956,
+      "domain_table_matches": 308,
+      "shared_packets": 5956,
+      "model_outputs": 13060,
+      "rerank_fallbacks": 93
+    },
+    "stage_accounted_usd": 7.1562822,
+    "custody": "implementation-owner verification; no independent custody claimed"
+  },
+  "receipt_verification": {
+    "status": "passed",
+    "checks": {
+      "archived_source_files": 191,
+      "source_messages": 4431,
+      "add_receipts": 298,
+      "usage_costs": 17407,
+      "reported_model_routes": 17402,
+      "reader_projections": 5956,
+      "grader_projections": 5956,
+      "source_quotes": 0,
+      "policy_configs": 28,
+      "grade_input_matches": 5956
+    },
+    "ingestion": {
+      "conv-42": {
+        "turns": 629,
+        "facts": 1096,
+        "fact_statuses": {
+          "active": 1096
+        },
+        "summaries": 44,
+        "updates": {},
+        "facts_dropped": 157,
+        "rejected_phases": 0
+      },
+      "conv-43": {
+        "turns": 680,
+        "facts": 1206,
+        "fact_statuses": {
+          "active": 1206
+        },
+        "summaries": 43,
+        "updates": {},
+        "facts_dropped": 260,
+        "rejected_phases": 0
+      },
+      "conv-44": {
+        "turns": 675,
+        "facts": 1208,
+        "fact_statuses": {
+          "active": 1208
+        },
+        "summaries": 46,
+        "updates": {},
+        "facts_dropped": 169,
+        "rejected_phases": 0
+      },
+      "conv-47": {
+        "turns": 689,
+        "facts": 1199,
+        "fact_statuses": {
+          "active": 1199
+        },
+        "summaries": 46,
+        "updates": {},
+        "facts_dropped": 223,
+        "rejected_phases": 0
+      },
+      "conv-48": {
+        "turns": 681,
+        "facts": 1126,
+        "fact_statuses": {
+          "active": 1126
+        },
+        "summaries": 46,
+        "updates": {},
+        "facts_dropped": 241,
+        "rejected_phases": 0
+      },
+      "conv-49": {
+        "turns": 509,
+        "facts": 907,
+        "fact_statuses": {
+          "active": 907
+        },
+        "summaries": 34,
+        "updates": {},
+        "facts_dropped": 142,
+        "rejected_phases": 0
+      },
+      "conv-50": {
+        "turns": 568,
+        "facts": 1135,
+        "fact_statuses": {
+          "active": 1135
+        },
+        "summaries": 39,
+        "updates": {},
+        "facts_dropped": 152,
+        "rejected_phases": 0
+      }
+    },
+    "unknown_reservations_retained": [],
+    "verifier_sha256": "20ac656f908c48455dc3aa861de6aa5a0611c725775d2002af1887becba6c330",
+    "custody": "separate implementation-owner verification pass; no independent custody claimed"
+  },
+  "budget_authorization": {
+    "authority": "CHIEF",
+    "instruction": "New budget is 50usd",
+    "authorized_phase_ceiling_usd": 50,
+    "accounted_usd_at_amendment": 3.7574532,
+    "recorded_at_utc": "2026-10-20T03:33:49.827237+00:00",
+    "current_frozen_execution_wave_ceiling_usd": 25,
+    "execution": "Keep the existing stricter admission ceiling for the in-flight frozen comparison; higher authorization is available if required without changing models, policy or question selection.",
+    "previous_supervisor_execution_ceiling_usd": 25
+  },
+  "protocol": {
+    "frozen_at_utc": "2026-10-20T03:01:40.315716+00:00",
+    "conversations": [
+      "conv-42",
+      "conv-43",
+      "conv-44",
+      "conv-47",
+      "conv-48",
+      "conv-49",
+      "conv-50"
+    ],
+    "memory_budget_tokens": 2000,
+    "counter": "cl100k_base:ordinary",
+    "reader_model": "same GPT-4o-mini, temperature 0, 200 output tokens",
+    "audit_model": "glm-5.3-flash",
+    "rubric": "source-v2 revision 3; qualified 16/16; shared 8k source packet; up to 16 explicitly bounded workers",
+    "binary_sha256": {
+      "licorice-eval": "b1e3bdf448960bdec0808d5d1c0cafba08f6b93e5886c6b5c551abd6b0b36f5b",
+      "licorice-aml": "10ab697ea76265312ed21f75e47a58d4755de498f92d4337e326451bfb6d2777"
+    },
+    "dataset_sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+    "runtime_files": 191
+  },
+  "recommendation": "facts + summaries; connected/scored policies remain experimental; no production default or public-board rank claimed"
+}

@@ -1,0 +1,30 @@
+[package]
+name = "licorice"
+description = "Long-term conversational memory: CogniGraph-style hierarchy on SQLite + sqlite-vector + FTS5"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+build = "build.rs"
+
+[dependencies]
+licorice-providers = { path = "../licorice-providers" }
+serde.workspace = true
+serde_json.workspace = true
+indexmap.workspace = true
+blake3.workspace = true
+rusqlite.workspace = true
+libsqlite3-sys.workspace = true
+tokio.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+sha2 = "0.10.9"
+
+[build-dependencies]
+cc.workspace = true
+
+[dev-dependencies]
+async-trait.workspace = true
+tempfile.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread"] }

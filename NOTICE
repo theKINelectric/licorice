@@ -1,0 +1,31 @@
+Memory Licorice
+
+Original Licorice project sources are licensed under the Apache License,
+Version 2.0. See LICENSE. Third-party components retain their own licenses;
+the project license does not replace or relicense those components.
+
+Licorice includes SQLite Vector, version 1.1.2, from SQLite Cloud, Inc.
+SQLite Vector is distributed under the Apache License, Version 2.0.
+Its license is preserved in vendor/sqlite-vector/LICENSE.md.
+
+The design acknowledges LiCoMemory (EverM0re/LiCoMemory) as a research reference.
+This acknowledgement is not a grant of rights to its reference repository,
+datasets, model weights, or other third-party material.
+
+This source repository does not redistribute Rust package dependencies; Cargo
+fetches them under their own licenses. Binary releases include lock-verified
+package and subcomponent notices. Research datasets, personal memory, provider
+credentials and model weights are not included.
+
+The sqlite-vector source also contains FP16 headers. Their upstream MIT
+license and attribution are preserved in vendor/sqlite-vector/libs/fp16/LICENSE.
+Copyright (c) 2017 Facebook Inc.
+Copyright (c) 2017 Georgia Institute of Technology
+Copyright 2019 Google LLC
+See its PROVENANCE.md for the pinned comparison and retained differences.
+
+Tokenizer implementation and data notices include the tiktoken-rs MIT grant
+and OpenAI tiktoken/GPT-2 MIT grants. Pinned upstream definitions verify all
+five embedded asset hashes.
+Generated Claude SDK declarations are not redistributed; a compatible Claude
+CLI regenerates them locally. Original Licorice code remains Apache-2.0.

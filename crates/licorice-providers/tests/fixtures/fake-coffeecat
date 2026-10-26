@@ -1,0 +1,33 @@
+#!/bin/sh
+# Stand-in for `coffeecat ask --jsonl` (see process_judge.rs): one response line per
+# request line, in order. The request's state picks the behaviour: "p" is the noul to
+# answer; "mode" is sleep, crash, error (with "code") or anonymous; "path" records the
+# raw request there. The model is "fake-PID ARGS", so tests can see restarts and flags.
+n=0
+field() { printf '%s\n' "$line" | sed -n "s/.*\"$1\":\"\([^\"]*\)\".*/\1/p"; }
+while IFS= read -r line; do
+    n=$((n + 1))
+    id=$(field id)
+    path=$(field path)
+    [ -n "$path" ] && printf '%s\n' "$line" >>"$path"
+    case "$(field mode)" in
+    sleep) sleep 0.5 ;;
+    crash) exit 3 ;;
+    error)
+        code=$(field code)
+        printf '{"kind":"error","id":"%s","line":%d,"error":{"code":"%s","message":"fake %s"}}\n' \
+            "$id" "$n" "$code" "$code"
+        [ "$code" = startup_error ] && exit 1
+        continue
+        ;;
+    anonymous)
+        printf '{"kind":"error","id":null,"line":%d,"error":{"code":"bounded_limit_exceeded","message":"request_bytes"}}\n' "$n"
+        continue
+        ;;
+    esac
+    p=$(printf '%s\n' "$line" | sed -n 's/.*"p":\([0-9.]*\).*/\1/p')
+    p=${p:-0.5}
+    printf '{"kind":"answer","id":"%s","line":%d,"model":"fake-%s %s","calibrated":false,"answers":{%s},"usage":{"tokens":7,"prompt_tokens":5,"candidate_tokens":2}}\n' \
+        "$id" "$n" "$$" "$*" \
+        "\"q\":{\"type\":\"noul\",\"noul\":$p},\"ready\":{\"type\":\"noul\",\"noul\":1},\"sufficient\":{\"type\":\"noul\",\"noul\":$p},\"contradicted\":{\"type\":\"noul\",\"noul\":0.1}"
+done

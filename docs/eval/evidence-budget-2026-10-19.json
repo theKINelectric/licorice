@@ -1,0 +1,587 @@
+{
+  "date": "2026-10-19",
+  "purpose": "Synthetic matched-budget mechanism check; not a held-out quality evaluation or calibration study",
+  "embedding_fixture": "synthetic/city-selection-v1; deliberately chosen two-dimensional geometry",
+  "engine": "OpenRouter Jev; jev-latest",
+  "deadline_ms": 1000,
+  "attempted_judgments": 4,
+  "judged": 3,
+  "unavailable": 1,
+  "reported_cost_usd": 6.1572e-05,
+  "cost_limit": "Sum of costs returned for successful calls; the timeout returned no usage/cost and may still have incurred provider work",
+  "results": [
+    {
+      "assessment": {
+        "contradicted": 0.41,
+        "cost": 2.0328e-05,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": null,
+        "input_tokens": 484,
+        "judgment_id": 1,
+        "latency_ms": 349.026084,
+        "model": "typesafe/jev-1.14-20261014",
+        "output_tokens": 42,
+        "status": "judged",
+        "sufficient": 0.06
+      },
+      "budget_omissions": {
+        "fact_ids": [
+          3
+        ],
+        "session_ids": [],
+        "turn_ids": []
+      },
+      "case": "city_list",
+      "cited_turns": [
+        "S1:1",
+        "S1:2"
+      ],
+      "config": {
+        "alpha": 1.0,
+        "budget_tokens": 61,
+        "chunk_candidates": 30,
+        "chunks": 0,
+        "entity_facts": 500,
+        "final_facts": 20,
+        "lexical_facts": 50,
+        "linked_entities": 8,
+        "mmr_lambda": 0.7,
+        "recency_k": 0.1,
+        "recency_weight": 0.0,
+        "rrf_k": 60.0,
+        "selection": "relevance",
+        "selection_candidates": 60,
+        "summaries": 0,
+        "superseded_current": 0.35,
+        "superseded_other": 0.8,
+        "vector_facts": 100,
+        "w_fact": 1.0,
+        "w_session": 0.0,
+        "window_facts": 100
+      },
+      "context": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada took a sightseeing trip to Oslo. [S1:2]\n",
+      "context_usage": {
+        "budget_tokens": 61,
+        "tokenizer": "cl100k_base:ordinary",
+        "tokens": 61
+      },
+      "fact_ids": [
+        1,
+        2
+      ],
+      "question": "Which two cities did Ada visit?",
+      "selection": {
+        "candidates": 3,
+        "considered": [
+          {
+            "fact_id": 1,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 1.0
+          },
+          {
+            "fact_id": 2,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 1.0
+          },
+          {
+            "fact_id": 3,
+            "packed": false,
+            "redundancy": 0.0,
+            "relevance": 0.9444444334065477,
+            "utility": 0.9444444334065477
+          }
+        ],
+        "effective": "relevance",
+        "requested": "relevance"
+      },
+      "synthetic_city_coverage": 0.5
+    },
+    {
+      "assessment": {
+        "contradicted": 0.05,
+        "cost": 2.0034e-05,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": null,
+        "input_tokens": 477,
+        "judgment_id": 2,
+        "latency_ms": 124.372125,
+        "model": "typesafe/jev-1.14-20261014",
+        "output_tokens": 42,
+        "status": "judged",
+        "sufficient": 0.98
+      },
+      "budget_omissions": {
+        "fact_ids": [
+          2
+        ],
+        "session_ids": [],
+        "turn_ids": []
+      },
+      "case": "city_list",
+      "cited_turns": [
+        "S1:1",
+        "S1:3"
+      ],
+      "config": {
+        "alpha": 1.0,
+        "budget_tokens": 61,
+        "chunk_candidates": 30,
+        "chunks": 0,
+        "entity_facts": 500,
+        "final_facts": 20,
+        "lexical_facts": 50,
+        "linked_entities": 8,
+        "mmr_lambda": 0.7,
+        "recency_k": 0.1,
+        "recency_weight": 0.0,
+        "rrf_k": 60.0,
+        "selection": "mmr",
+        "selection_candidates": 60,
+        "summaries": 0,
+        "superseded_current": 0.35,
+        "superseded_other": 0.8,
+        "vector_facts": 100,
+        "w_fact": 1.0,
+        "w_session": 0.0,
+        "window_facts": 100
+      },
+      "context": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada visited Lisbon. [S1:3]\n",
+      "context_usage": {
+        "budget_tokens": 61,
+        "tokenizer": "cl100k_base:ordinary",
+        "tokens": 56
+      },
+      "fact_ids": [
+        1,
+        3
+      ],
+      "question": "Which two cities did Ada visit?",
+      "selection": {
+        "candidates": 3,
+        "considered": [
+          {
+            "fact_id": 1,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 0.7
+          },
+          {
+            "fact_id": 3,
+            "packed": true,
+            "redundancy": 0.5353807815881719,
+            "relevance": 0.9444444334065477,
+            "utility": 0.5004968689081317
+          },
+          {
+            "fact_id": 2,
+            "packed": false,
+            "redundancy": 1.0,
+            "relevance": 1.0,
+            "utility": 0.3999999999999999
+          }
+        ],
+        "effective": "mmr",
+        "requested": "mmr"
+      },
+      "synthetic_city_coverage": 1.0
+    },
+    {
+      "assessment": {
+        "contradicted": null,
+        "cost": null,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": "no answer within 1s",
+        "input_tokens": null,
+        "judgment_id": 3,
+        "latency_ms": 1001.989791,
+        "model": null,
+        "output_tokens": null,
+        "status": "unavailable",
+        "sufficient": null
+      },
+      "budget_omissions": {
+        "fact_ids": [],
+        "session_ids": [],
+        "turn_ids": []
+      },
+      "case": "occurrence_count",
+      "cited_turns": [
+        "S1:1",
+        "S1:2",
+        "S1:3"
+      ],
+      "config": {
+        "alpha": 1.0,
+        "budget_tokens": 200,
+        "chunk_candidates": 30,
+        "chunks": 0,
+        "entity_facts": 500,
+        "final_facts": 20,
+        "lexical_facts": 50,
+        "linked_entities": 8,
+        "mmr_lambda": 0.7,
+        "recency_k": 0.1,
+        "recency_weight": 0.0,
+        "rrf_k": 60.0,
+        "selection": "relevance",
+        "selection_candidates": 60,
+        "summaries": 0,
+        "superseded_current": 0.35,
+        "superseded_other": 0.8,
+        "vector_facts": 100,
+        "w_fact": 1.0,
+        "w_session": 0.0,
+        "window_facts": 100
+      },
+      "context": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada took a sightseeing trip to Oslo. [S1:2]\n- said 8 May 2023: Ada visited Lisbon. [S1:3]\n",
+      "context_usage": {
+        "budget_tokens": 200,
+        "tokenizer": "cl100k_base:ordinary",
+        "tokens": 80
+      },
+      "fact_ids": [
+        1,
+        2,
+        3
+      ],
+      "question": "How many visits did Ada make?",
+      "selection": {
+        "candidates": 3,
+        "considered": [
+          {
+            "fact_id": 1,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 1.0
+          },
+          {
+            "fact_id": 2,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 1.0
+          },
+          {
+            "fact_id": 3,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 0.9444444334065477,
+            "utility": 0.9444444334065477
+          }
+        ],
+        "effective": "relevance",
+        "requested": "relevance"
+      },
+      "synthetic_city_coverage": 1.0
+    },
+    {
+      "assessment": {
+        "contradicted": 0.1,
+        "cost": 2.121e-05,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "error": null,
+        "input_tokens": 505,
+        "judgment_id": 4,
+        "latency_ms": 422.124125,
+        "model": "typesafe/jev-1.14-20261014",
+        "output_tokens": 42,
+        "status": "judged",
+        "sufficient": 0.62
+      },
+      "budget_omissions": {
+        "fact_ids": [],
+        "session_ids": [],
+        "turn_ids": []
+      },
+      "case": "occurrence_count",
+      "cited_turns": [
+        "S1:1",
+        "S1:2",
+        "S1:3"
+      ],
+      "config": {
+        "alpha": 1.0,
+        "budget_tokens": 200,
+        "chunk_candidates": 30,
+        "chunks": 0,
+        "entity_facts": 500,
+        "final_facts": 20,
+        "lexical_facts": 50,
+        "linked_entities": 8,
+        "mmr_lambda": 0.7,
+        "recency_k": 0.1,
+        "recency_weight": 0.0,
+        "rrf_k": 60.0,
+        "selection": "mmr",
+        "selection_candidates": 60,
+        "summaries": 0,
+        "superseded_current": 0.35,
+        "superseded_other": 0.8,
+        "vector_facts": 100,
+        "w_fact": 1.0,
+        "w_session": 0.0,
+        "window_facts": 100
+      },
+      "context": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada took a sightseeing trip to Oslo. [S1:2]\n- said 8 May 2023: Ada visited Lisbon. [S1:3]\n",
+      "context_usage": {
+        "budget_tokens": 200,
+        "tokenizer": "cl100k_base:ordinary",
+        "tokens": 80
+      },
+      "fact_ids": [
+        1,
+        2,
+        3
+      ],
+      "question": "How many visits did Ada make?",
+      "selection": {
+        "candidates": 3,
+        "considered": [
+          {
+            "fact_id": 1,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 1.0
+          },
+          {
+            "fact_id": 2,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 1.0,
+            "utility": 1.0
+          },
+          {
+            "fact_id": 3,
+            "packed": true,
+            "redundancy": 0.0,
+            "relevance": 0.9444444334065477,
+            "utility": 0.9444444334065477
+          }
+        ],
+        "effective": "relevance",
+        "requested": "mmr"
+      },
+      "synthetic_city_coverage": 1.0
+    }
+  ],
+  "judgments": [
+    {
+      "request": {
+        "deadline_ms": 1000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada took a sightseeing trip to Oslo. [S1:2]\n",
+          "question": "Which two cities did Ada visit?"
+        },
+        "version": 1
+      },
+      "response": {
+        "answers": {
+          "contradicted": {
+            "noul": 0.41,
+            "type": "noul"
+          },
+          "sufficient": {
+            "noul": 0.06,
+            "type": "noul"
+          }
+        },
+        "assessment": {
+          "contradicted": 0.41,
+          "cost": 2.0328e-05,
+          "engine": "https://openrouter.ai/api/v1/systemone",
+          "error": null,
+          "input_tokens": 484,
+          "judgment_id": null,
+          "latency_ms": 349.026084,
+          "model": "typesafe/jev-1.14-20261014",
+          "output_tokens": 42,
+          "status": "judged",
+          "sufficient": 0.06
+        }
+      }
+    },
+    {
+      "request": {
+        "deadline_ms": 1000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada visited Lisbon. [S1:3]\n",
+          "question": "Which two cities did Ada visit?"
+        },
+        "version": 1
+      },
+      "response": {
+        "answers": {
+          "contradicted": {
+            "noul": 0.05,
+            "type": "noul"
+          },
+          "sufficient": {
+            "noul": 0.98,
+            "type": "noul"
+          }
+        },
+        "assessment": {
+          "contradicted": 0.05,
+          "cost": 2.0034e-05,
+          "engine": "https://openrouter.ai/api/v1/systemone",
+          "error": null,
+          "input_tokens": 477,
+          "judgment_id": null,
+          "latency_ms": 124.372125,
+          "model": "typesafe/jev-1.14-20261014",
+          "output_tokens": 42,
+          "status": "judged",
+          "sufficient": 0.98
+        }
+      }
+    },
+    {
+      "request": {
+        "deadline_ms": 1000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada took a sightseeing trip to Oslo. [S1:2]\n- said 8 May 2023: Ada visited Lisbon. [S1:3]\n",
+          "question": "How many visits did Ada make?"
+        },
+        "version": 1
+      },
+      "response": {
+        "answers": {},
+        "assessment": {
+          "contradicted": null,
+          "cost": null,
+          "engine": "https://openrouter.ai/api/v1/systemone",
+          "error": "no answer within 1s",
+          "input_tokens": null,
+          "judgment_id": null,
+          "latency_ms": 1001.989791,
+          "model": null,
+          "output_tokens": null,
+          "status": "unavailable",
+          "sufficient": null
+        }
+      }
+    },
+    {
+      "request": {
+        "deadline_ms": 1000,
+        "engine": "https://openrouter.ai/api/v1/systemone",
+        "questions": {
+          "contradicted": {
+            "criteria": {
+              "false": "No explicit contradiction is present. Absence of evidence alone is not a contradiction.",
+              "true": "The memory states something incompatible with a premise of the question."
+            },
+            "instructions": "Does the supplied memory explicitly contradict a factual assumption in the supplied question?",
+            "type": "noul"
+          },
+          "sufficient": {
+            "criteria": {
+              "false": "Some required information is absent. Related information alone is not sufficient.",
+              "true": "The answer can be supported using only this memory, including every requested item or reasoning step."
+            },
+            "instructions": "Does the supplied memory contain all the information needed to answer the supplied question?",
+            "type": "noul"
+          }
+        },
+        "requested_model": "jev-latest",
+        "state": {
+          "memory": "## Memory (as of 8 May 2023)\n### Facts (chronological)\n- said 8 May 2023: Ada visited Oslo. [S1:1]\n- said 8 May 2023: Ada took a sightseeing trip to Oslo. [S1:2]\n- said 8 May 2023: Ada visited Lisbon. [S1:3]\n",
+          "question": "How many visits did Ada make?"
+        },
+        "version": 1
+      },
+      "response": {
+        "answers": {
+          "contradicted": {
+            "noul": 0.1,
+            "type": "noul"
+          },
+          "sufficient": {
+            "noul": 0.62,
+            "type": "noul"
+          }
+        },
+        "assessment": {
+          "contradicted": 0.1,
+          "cost": 2.121e-05,
+          "engine": "https://openrouter.ai/api/v1/systemone",
+          "error": null,
+          "input_tokens": 505,
+          "judgment_id": null,
+          "latency_ms": 422.124125,
+          "model": "typesafe/jev-1.14-20261014",
+          "output_tokens": 42,
+          "status": "judged",
+          "sufficient": 0.62
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+# Build output
+/target/
+/spikes/*/target/
+
+# Secrets: API keys for evaluation runs live here.
+.env
+.env.*
+
+# Model assets fetched by scripts/fetch-wordllama.sh
+/models/
+
+# Local evaluation inputs, spaces, provider payloads and usage ledgers.
+/runs/
+
+# Upstream LiCoMemory checkout used as a reference (EverM0re/LiCoMemory @ a844d99);
+# it is its own git repository and is re-cloned rather than vendored.
+/inspiration/
+
+.DS_Store
+
+# AML service user memories and local ownership database.
+/data/
+
+# Python bytecode
+__pycache__/
+*.pyc

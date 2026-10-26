@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+"""Launch Claude Code with its own complete Licorice memory binding."""
+import json
+import os
+from pathlib import Path
+import re
+import shlex
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}\Z")
+
+
+def read_binding(path):
+    return validate_binding(json.loads(path.read_text()))
+
+
+def validate_binding(binding):
+    if not isinstance(binding, dict):
+        raise ValueError("A complete native binding must be an object")
+    if binding.get("version") != 1 or binding.get("backend") != "native":
+        raise ValueError("Expected a version1 native memory binding")
+    for field in ("agent_id", "relationship_id"):
+        if not ID.fullmatch(binding.get(field, "")):
+            raise ValueError("Invalid memory identity or relationship")
+    for field in ("store", "binary", "models"):
+        if not Path(binding.get(field, "")).is_absolute():
+            raise ValueError("Memory paths must be absolute")
+    if type(binding.get("embed_dim")) is not int or not 0 < binding["embed_dim"] <= 65536:
+        raise ValueError("Invalid embedding dimension")
+    if type(binding.get("include_episodes")) is not bool:
+        raise ValueError("Select episode recall explicitly")
+    return binding
+
+
+def selected_binding(root=ROOT):
+    claude = read_binding(root / "data/being/claude.json")
+    codex = read_binding(root / "data/being/active.json")
+    if claude["agent_id"] == codex["agent_id"]:
+        raise ValueError("Claude and Codex must have distinct identities")
+    if claude["relationship_id"] == codex["relationship_id"]:
+        raise ValueError("Claude and Codex must have distinct relationship scopes")
+    a, b = Path(claude["store"]), Path(codex["store"])
+    if a.resolve() == b.resolve() or (a.exists() and b.exists() and a.samefile(b)):
+        raise ValueError("Claude and Codex must have separate memory files")
+    return claude
+
+
+def memory_environment(binding, inherited):
+    # Never retain an inherited Codex/prototype/partial memory selection.
+    env = {k: v for k, v in inherited.items() if not k.startswith("LICORICE_BEING_")}
+    env.update({
+        "LICORICE_BEING_BACKEND": "native",
+        "LICORICE_BEING_AGENT": binding["agent_id"],
+        "LICORICE_BEING_STORE": binding["store"],
+        "LICORICE_BEING_BIN": binding["binary"],
+        "LICORICE_BEING_RELATIONSHIP": binding["relationship_id"],
+        "LICORICE_BEING_DIM": str(binding["embed_dim"]),
+        "LICORICE_BEING_MODELS": binding["models"],
+        "LICORICE_BEING_EPISODES": "1" if binding["include_episodes"] else "0",
+    })
+    return env
+
+
+def credential(path):
+    """Read only the authorized Anthropic key; never execute a dotenv file."""
+    if not path.exists():
+        return None
+    for line in path.read_text().splitlines():
+        key, sep, value = line.partition("=")
+        if sep and key.strip().removeprefix("export ") == "ANTHROPIC_API_KEY":
+            values = shlex.split(value, comments=True)
+            if len(values) == 1 and values[0]:
+                return values[0]
+    return None
+
+
+def native(binding, command, value=None):
+    args = [binding["binary"], command, "--store", binding["store"],
+            "--agent", binding["agent_id"], "--embed-dim", str(binding["embed_dim"]),
+            "--relationship", binding["relationship_id"]]
+    if command == "context":
+        args += ["--models", binding["models"]]
+    completed = subprocess.run(
+        args, input="" if value is None else json.dumps(value), text=True,
+        capture_output=True, timeout=15, check=False,
+    )
+    if completed.returncode:
+        raise ValueError("Selected native memory is unavailable or belongs to another agent")
+    result = json.loads(completed.stdout)
+    if result.get("ok") is not True:
+        raise ValueError("Native memory rejected the binding")
+    return result["result"]
+
+
+def main():
+    binding = selected_binding()
+    # Snapshot checks ownership before any Claude process or credential loading.
+    state = native(binding, "snapshot")
+    if sys.argv[1:] == ["--memory-status"]:
+        print(json.dumps({"agent_id": state["agent_id"], "revision": state["revision"],
+                          "store": binding["store"], "relationship_id": binding["relationship_id"],
+                          "include_episodes": binding["include_episodes"],
+                          "budget_tokens": 2000}, indent=2))
+        return
+    if sys.argv[1:] == ["--memory-context"]:
+        print(native(binding, "context", {"query": "current commitments and shared work",
+                     "budget_tokens": 2000, "include_episodes": binding["include_episodes"]})["text"], end="")
+        return
+    runtime = Path(os.environ.get("LICORICE_CLAUDE_BIN", str(Path.home() / ".local/bin/claude")))
+    if not runtime.is_absolute() or not runtime.is_file():
+        raise ValueError("Set LICORICE_CLAUDE_BIN to a compatible absolute Claude Code executable")
+    version = subprocess.run([str(runtime), "--version"], capture_output=True, text=True,
+                             timeout=15, check=False)
+    match = re.match(r"(\d+)\.(\d+)\.(\d+)", version.stdout)
+    if version.returncode or not match or tuple(map(int, match.groups())) < (2, 1, 287):
+        raise ValueError("Native Mods require Claude Code2.1.287 or later; PATH's old npm CLI is not selected")
+    env = memory_environment(binding, os.environ)
+    if not env.get("ANTHROPIC_API_KEY"):
+        key = credential(ROOT / ".env")
+        if key:
+            env["ANTHROPIC_API_KEY"] = key
+    # The flag guarantees loading even where project env is read after plugins.
+    os.chdir(ROOT)
+    os.execve(str(runtime), [str(runtime), "--plugin-dir",
+              str(ROOT / "integrations/being-memory"), *sys.argv[1:]], env)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, ValueError, KeyError, subprocess.SubprocessError):
+        # Keep file contents, provider keys and subprocess stderr out of errors.
+        print("Claude BEING setup unavailable. Check data/being/claude.json, distinct store ownership, and the native runtime. No fallback identity was selected.", file=sys.stderr)
+        sys.exit(1)

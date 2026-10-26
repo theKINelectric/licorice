@@ -1,0 +1,90 @@
+{
+  "schema": "licorice-local-embedding-runtime/1",
+  "checked_on": "2026-10-26",
+  "local": {
+    "python": "3.13.2",
+    "platform": "macOS Apple Silicon",
+    "venv": "/tmp/licorice-onnx-venv",
+    "system_packages_changed": false
+  },
+  "top_level_wheels": [
+    {
+      "package": "onnxruntime",
+      "version": "1.23.2",
+      "source": "https://pypi.org/pypi/onnxruntime/1.23.2/json",
+      "linux_x86_64": [
+        {
+          "python": "3.11",
+          "sha256": "da44b99206e77734c5819aa2142c69e64f3b46edc3bd314f6a45a932defc0b3e"
+        },
+        {
+          "python": "3.12",
+          "sha256": "0f9b4ae77f8e3c9bee50c27bc1beede83f786fe1d52e99ac85aa8d65a01e9b77"
+        }
+      ]
+    },
+    {
+      "package": "numpy",
+      "version": "2.2.6",
+      "source": "https://pypi.org/pypi/numpy/2.2.6/json",
+      "linux_x86_64": [
+        {
+          "python": "3.11",
+          "sha256": "ba10f8411898fc418a521833e014a77d3ca01c15b0c6cdcce6a0d2897e6dbbdf"
+        },
+        {
+          "python": "3.12",
+          "sha256": "fd83c01228a688733f1ded5201c678f0c53ecc1006ffbc404db9f7a899ac6249"
+        }
+      ]
+    },
+    {
+      "package": "tokenizers",
+      "version": "0.22.1",
+      "source": "https://pypi.org/pypi/tokenizers/0.22.1/json",
+      "linux_x86_64": [
+        {
+          "python": "3.11/3.12 abi3",
+          "sha256": "e2ef6063d7a84994129732b47e7915e8710f27f99f3a3260b8a38fc7ccd083f4"
+        }
+      ]
+    }
+  ],
+  "osv_snapshot": {
+    "endpoint": "https://api.osv.dev/v1/querybatch",
+    "ecosystem": "PyPI",
+    "input": "All 24 package/version entries in requirements.versions.txt, excluding comments",
+    "results_returned": 24,
+    "vulnerability_records": 0,
+    "limitations": "Read-only advisory database snapshot. It does not establish absence of unknown vulnerabilities or qualify unrelated distributions."
+  },
+  "dependency_lock": "requirements.versions.txt (original locally installed versions)",
+  "unit_controls": {
+    "count": 12,
+    "passed": 12,
+    "fixtures": "synthetic tokenizer/ORT session, real loopback HTTP",
+    "actual_model_quality_claim": false
+  },
+  "paid_calls": 0,
+  "cloud_resources_created": 0,
+  "linux312_wheel_resolution": {
+    "file": "linux312-wheel-resolution.json",
+    "packages": 24,
+    "all_wheels": true,
+    "missing_or_unpinned_dependencies": 0,
+    "windows_only_distributions": 0,
+    "actual_linux_runtime_execution": false
+  },
+  "linux312_hash_lock": {
+    "file": "requirements.lock",
+    "packages": 24,
+    "format": "direct official PyPI wheel URL plus --hash=sha256",
+    "target": "Linux x86_64 CPython 3.12",
+    "validated_against": "linux312-wheel-resolution.json",
+    "version_pins_file": "requirements.versions.txt",
+    "sha256": "abd693a5a657d4d64fe2c5918926ee8b368ea48a162162b79662a3cbd9e326be",
+    "validation": "Canonical names, versions, wheel filenames/tags, all HTTPS URLs limited to files.pythonhosted.org without userinfo/query/fragment, one exact hash for each of24 pins; no extra or missing packages.",
+    "pip_require_hashes_dry_run": "passed; exactly24 expected URL/version/SHA256 tuples, no extra distributions",
+    "pip_report_sha256": "72c85fac315b2c04b42feac22ef18d4a3d7bbc77f3af74ff43090167870aa249"
+  }
+}

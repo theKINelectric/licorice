@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77.0.3", "build", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sqliteai-vector"
+dynamic = ["version", "classifiers"]
+description = "Python prebuilt binaries for SQLite Vector extension for all supported platforms and architectures."
+authors = [
+    { name = "SQLite AI Team" }
+]
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE.md"]
+requires-python = ">=3"
+
+[project.urls]
+Homepage = "https://sqlite.ai"
+Documentation = "https://github.com/sqliteai/sqlite-vector/blob/main/API.md"
+Repository = "https://github.com/sqliteai/sqlite-vector"
+Issues = "https://github.com/sqliteai/sqlite-vector/issues"
+
+[tool.setuptools]
+packages = {find = {where = ["src"]}}
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "sqlite_vector._version.__version__"}
+
+[tool.bdist_wheel]
+# Force platform-specific wheels
+universal = false
